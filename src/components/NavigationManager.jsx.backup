@@ -1,0 +1,151 @@
+// ARCHIVO DE RESPALDO - NavigationManager.jsx original
+// Este archivo se conserva como respaldo del sistema anterior
+// Ya no se usa en el nuevo sistema con React Router
+
+// src/components/NavigationManager.jsx
+// Componente que maneja la navegación condicional según el estado del usuario
+
+import { useState, useEffect } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import LoginPage from '../pages/LoginPage'
+import WelcomePage from '../pages/WelcomePage'
+import ProfilePage from '../pages/ProfilePage'
+
+function NavigationManager() {
+  const { user, isAuthenticated, loading } = useAuth()
+  const [currentPage, setCurrentPage] = useState('login')
+  const [isNewUser, setIsNewUser] = useState(false)
+
+  // Escuchar cambios en el estado de autenticación
+  useEffect(() => {
+    if (!loading) {
+      if (isAuthenticated && user) {
+        // Usuario autenticado - verificar si es nuevo
+        const userCreationTime = user?.metadata?.creationTime
+        const lastSignInTime = user?.metadata?.lastSignInTime
+        let newUserStatus = false
+
+        if (userCreationTime && lastSignInTime) {
+          const timeDiff = new Date(lastSignInTime) - new Date(userCreationTime)
+          // Si la diferencia entre creación y último login es menor a 5 minutos,
+          // consideramos que es un usuario nuevo
+          newUserStatus = timeDiff < 5 * 60 * 1000
+        }
+
+        setIsNewUser(newUserStatus)
+        setCurrentPage(newUserStatus ? 'welcome' : 'profile')
+      } else {
+        // Usuario no autenticado - limpiar estado y ir a login
+        setCurrentPage('login')
+        setIsNewUser(false)
+      }
+    }
+  }, [isAuthenticated, loading, user])
+
+  // Funciones de navegación para pasar a los componentes
+  const navigateToProfile = () => {
+    setCurrentPage('profile')
+    setIsNewUser(false)
+  }
+
+  const navigateToWelcome = () => {
+    setCurrentPage('welcome')
+  }
+
+  // Mostrar loading mientras se determina el estado
+  if (loading) {
+    return (
+      <div style={styles.loadingContainer}>
+        <div style={styles.loadingCard}>
+          <div style={styles.loadingSpinner}>🔄</div>
+          <h2 style={styles.loadingTitle}>Cargando Tarpu Yachay...</h2>
+          <p style={styles.loadingText}>
+            Verificando tu sesión y preparando la aplicación
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Renderizar la página correspondiente
+  switch (currentPage) {
+    case 'welcome':
+      // Solo mostrar WelcomePage si el usuario está autenticado
+      if (isAuthenticated) {
+        return (
+          <WelcomePage
+            onNavigateToProfile={navigateToProfile}
+            isNewUser={isNewUser}
+          />
+        )
+      }
+      // Si no está autenticado, fallback a login
+      return (
+        <LoginPage
+          onSuccessfulLogin={navigateToProfile}
+          onSuccessfulRegister={navigateToWelcome}
+        />
+      )
+    case 'profile':
+      // Solo mostrar ProfilePage si el usuario está autenticado
+      if (isAuthenticated) {
+        return <ProfilePage onNavigateToWelcome={navigateToWelcome} />
+      }
+      // Si no está autenticado, fallback a login
+      return (
+        <LoginPage
+          onSuccessfulLogin={navigateToProfile}
+          onSuccessfulRegister={navigateToWelcome}
+        />
+      )
+    default:
+      return (
+        <LoginPage
+          onSuccessfulLogin={navigateToProfile}
+          onSuccessfulRegister={navigateToWelcome}
+        />
+      )
+  }
+}
+
+// Estilos para el loading
+const styles = {
+  loadingContainer: {
+    minHeight: '100vh',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  },
+  loadingCard: {
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: '16px',
+    padding: '40px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    textAlign: 'center',
+    maxWidth: '400px',
+    width: '100%',
+  },
+  loadingSpinner: {
+    fontSize: '48px',
+    marginBottom: '20px',
+    animation: 'spin 2s linear infinite',
+  },
+  loadingTitle: {
+    fontSize: '24px',
+    fontWeight: '700',
+    color: '#2c3e50',
+    marginBottom: '12px',
+  },
+  loadingText: {
+    fontSize: '16px',
+    color: '#7f8c8d',
+    marginBottom: '0',
+  },
+}
+
+export default NavigationManager
