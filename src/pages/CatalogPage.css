@@ -1,0 +1,447 @@
+/* src/pages/CatalogPage.css */
+/* Estilos dedicados para la página del catálogo de semillas */
+/* Mobile-first approach para Galaxy S8 (360px) y similares */
+
+/* Variables locales específicas para el catálogo */
+.catalog-page {
+  --catalog-primary-color: #1976d2;
+  --catalog-secondary-color: #4caf50;
+  --catalog-error-color: #d32f2f;
+  --catalog-background: #f5f5f5;
+  --catalog-card-background: white;
+  --catalog-text-primary: #333;
+  --catalog-text-secondary: #666;
+  --catalog-border-color: #e0e0e0;
+  --catalog-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --catalog-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor principal */
+.catalog-page {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--catalog-background);
+  min-height: calc(100vh - 140px);
+}
+
+/* Header de la página */
+.catalog-header {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: var(--catalog-card-background);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: var(--catalog-shadow);
+}
+
+.catalog-title {
+  color: var(--catalog-primary-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.catalog-subtitle {
+  color: var(--catalog-text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Sección de semillas */
+.catalog-seeds-section {
+  background-color: var(--catalog-card-background);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: var(--catalog-shadow-light);
+}
+
+.catalog-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.catalog-section-title {
+  color: var(--catalog-text-primary);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+  flex: 1;
+}
+
+.catalog-results-count {
+  color: var(--catalog-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Grid de semillas - Mobile first */
+.catalog-seeds-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* Estados de carga */
+.catalog-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.catalog-loading-spinner {
+  font-size: 32px;
+  margin-bottom: 12px;
+  animation: catalogSpin 2s linear infinite;
+}
+
+.catalog-loading-text {
+  color: var(--catalog-text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Estados de error */
+.catalog-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  text-align: center;
+  border: 2px solid #ffebee;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.catalog-error-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.catalog-error-title {
+  color: var(--catalog-error-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.catalog-error-text {
+  color: var(--catalog-text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+.catalog-retry-button {
+  background-color: var(--catalog-primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.catalog-retry-button:hover {
+  background-color: #1565c0;
+}
+
+.catalog-retry-button:active {
+  transform: translateY(1px);
+}
+
+/* Estado vacío */
+.catalog-empty-state {
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.catalog-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.catalog-empty-title {
+  color: var(--catalog-text-primary);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.catalog-empty-text {
+  color: var(--catalog-text-secondary);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Botón cargar más */
+.catalog-load-more-section {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.catalog-load-more-button {
+  background-color: var(--catalog-secondary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  touch-action: manipulation;
+}
+
+.catalog-load-more-button:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+}
+
+.catalog-load-more-button:active {
+  transform: translateY(1px);
+}
+
+.catalog-load-more-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.catalog-load-more-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Sección de información */
+.catalog-info-section {
+  margin-bottom: 20px;
+}
+
+.catalog-info-card {
+  background-color: #e3f2fd;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #bbdefb;
+}
+
+.catalog-info-title {
+  color: var(--catalog-primary-color);
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 0 12px 0;
+}
+
+.catalog-info-list {
+  color: #1565c0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+  padding-left: 16px;
+}
+
+.catalog-info-list li {
+  margin-bottom: 4px;
+}
+
+/* Animaciones */
+@keyframes catalogSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Transiciones de página */
+.catalog-page-transition {
+  animation: catalogFadeIn 0.3s ease-in-out;
+}
+
+@keyframes catalogFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Optimizaciones para rendimiento */
+.catalog-gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Tablet - 480px y superior */
+@media (min-width: 480px) {
+  .catalog-page {
+    padding: 20px;
+  }
+
+  .catalog-header {
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+
+  .catalog-title {
+    font-size: 1.7rem;
+  }
+
+  .catalog-subtitle {
+    font-size: 1rem;
+  }
+
+  .catalog-seeds-section {
+    padding: 20px;
+  }
+
+  .catalog-section-title {
+    font-size: 1.2rem;
+  }
+
+  .catalog-results-count {
+    font-size: 0.9rem;
+  }
+
+  /* Grid de 2 columnas en tablet */
+  .catalog-seeds-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .catalog-loading-state,
+  .catalog-error-state,
+  .catalog-empty-state {
+    padding: 50px 20px;
+  }
+
+  .catalog-loading-spinner,
+  .catalog-error-icon {
+    font-size: 40px;
+  }
+
+  .catalog-empty-icon {
+    font-size: 3.5rem;
+  }
+
+  .catalog-info-card {
+    padding: 20px;
+  }
+}
+
+/* Desktop pequeño - 768px y superior */
+@media (min-width: 768px) {
+  .catalog-title {
+    font-size: 1.8rem;
+  }
+
+  .catalog-section-title {
+    font-size: 1.3rem;
+  }
+
+  /* Grid de 3 columnas en desktop pequeño */
+  .catalog-seeds-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .catalog-section-header {
+    margin-bottom: 20px;
+  }
+
+  .catalog-loading-state,
+  .catalog-error-state,
+  .catalog-empty-state {
+    padding: 60px 20px;
+  }
+
+  .catalog-loading-spinner,
+  .catalog-error-icon {
+    font-size: 48px;
+  }
+
+  .catalog-empty-icon {
+    font-size: 4rem;
+  }
+}
+
+/* Desktop grande - 1024px y superior */
+@media (min-width: 1024px) {
+  .catalog-seeds-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .catalog-section-header {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Mejoras para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+  .catalog-retry-button,
+  .catalog-load-more-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Modo oscuro (opcional - para futuras implementaciones) */
+@media (prefers-color-scheme: dark) {
+  .catalog-page {
+    --catalog-background: #121212;
+    --catalog-card-background: #1e1e1e;
+    --catalog-text-primary: #ffffff;
+    --catalog-text-secondary: #b3b3b3;
+    --catalog-border-color: #333333;
+  }
+
+  .catalog-error-state {
+    background-color: #1e1e1e;
+    border-color: #333;
+  }
+}
+
+/* Accesibilidad - Reducir animaciones si se prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .catalog-page-transition,
+  .catalog-loading-spinner {
+    animation: none;
+  }
+
+  .catalog-retry-button,
+  .catalog-load-more-button {
+    transition: none;
+  }
+}

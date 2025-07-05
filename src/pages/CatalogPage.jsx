@@ -1,10 +1,12 @@
 // src/pages/CatalogPage.jsx
 // Página del catálogo de semillas disponibles
 // BLOQUE 6 - PASO 5: Integración completa con componentes y datos reales
+// Mobile-first responsive design con CSS dedicado
 
 import { useState, useEffect } from 'react'
 import { SearchBar, SeedCard, SeedDetailModal } from '../components/catalog'
 import { getPublicSeeds } from '../services/seedCatalogService'
+import './CatalogPage.css'
 
 function CatalogPage() {
   // Estados para búsqueda y filtros
@@ -180,12 +182,20 @@ function CatalogPage() {
     document.head.appendChild(style)
   }
 
+  // Formatear contador de resultados
+  const getResultsText = () => {
+    if (loading) return '...'
+    const count = seeds.length
+    const suffix = count !== 1 ? 'resultados' : 'resultado'
+    return `${count} ${suffix}`
+  }
+
   return (
-    <div style={styles.container} className="page-transition gpu-accelerated">
+    <div className="catalog-page catalog-page-transition catalog-gpu-accelerated">
       {/* Header de la página */}
-      <div style={styles.header}>
-        <h1 style={styles.title}>🌱 Catálogo de Semillas</h1>
-        <p style={styles.subtitle}>
+      <div className="catalog-header">
+        <h1 className="catalog-title">🌱 Catálogo de Semillas</h1>
+        <p className="catalog-subtitle">
           Explora las semillas disponibles para intercambio
         </p>
       </div>
@@ -202,30 +212,26 @@ function CatalogPage() {
       />
 
       {/* Lista de semillas */}
-      <div style={styles.seedsSection}>
-        <div style={styles.sectionHeader}>
-          <h2 style={styles.sectionTitle}>Semillas Disponibles</h2>
-          <span style={styles.resultsCount}>
-            {loading
-              ? '...'
-              : `${seeds.length} resultado${seeds.length !== 1 ? 's' : ''}`}
-          </span>
+      <div className="catalog-seeds-section">
+        <div className="catalog-section-header">
+          <h2 className="catalog-section-title">Semillas Disponibles</h2>
+          <span className="catalog-results-count">{getResultsText()}</span>
         </div>
 
         {/* Estados de carga y error */}
         {loading && (
-          <div style={styles.loadingState}>
-            <div style={styles.loadingSpinner}>⏳</div>
-            <p style={styles.loadingText}>Cargando semillas...</p>
+          <div className="catalog-loading-state">
+            <div className="catalog-loading-spinner">⏳</div>
+            <p className="catalog-loading-text">Cargando semillas...</p>
           </div>
         )}
 
         {error && (
-          <div style={styles.errorState}>
-            <div style={styles.errorIcon}>⚠️</div>
-            <h3 style={styles.errorTitle}>Error de conexión</h3>
-            <p style={styles.errorText}>{error}</p>
-            <button onClick={loadSeeds} style={styles.retryButton}>
+          <div className="catalog-error-state">
+            <div className="catalog-error-icon">⚠️</div>
+            <h3 className="catalog-error-title">Error de conexión</h3>
+            <p className="catalog-error-text">{error}</p>
+            <button onClick={loadSeeds} className="catalog-retry-button">
               🔄 Intentar nuevamente
             </button>
           </div>
@@ -233,7 +239,7 @@ function CatalogPage() {
 
         {/* Grid de semillas */}
         {!loading && !error && seeds.length > 0 && (
-          <div style={styles.seedsGrid}>
+          <div className="catalog-seeds-grid">
             {seeds.map(seed => (
               <SeedCard
                 key={seed.id}
@@ -247,14 +253,11 @@ function CatalogPage() {
 
         {/* Botón cargar más */}
         {!loading && !error && seeds.length > 0 && hasMore && (
-          <div style={styles.loadMoreSection}>
+          <div className="catalog-load-more-section">
             <button
               onClick={loadMoreSeeds}
               disabled={loadingMore}
-              style={{
-                ...styles.loadMoreButton,
-                ...(loadingMore ? styles.loadMoreButtonDisabled : {}),
-              }}
+              className={`catalog-load-more-button ${loadingMore ? 'disabled' : ''}`}
             >
               {loadingMore ? '⏳ Cargando...' : '📄 Cargar más semillas'}
             </button>
@@ -263,14 +266,14 @@ function CatalogPage() {
 
         {/* Estado vacío */}
         {!loading && !error && seeds.length === 0 && (
-          <div style={styles.emptyState}>
-            <div style={styles.emptyIcon}>🌱</div>
-            <h3 style={styles.emptyTitle}>
+          <div className="catalog-empty-state">
+            <div className="catalog-empty-icon">🌱</div>
+            <h3 className="catalog-empty-title">
               {searchTerm || selectedCategory || showOnlyAvailable
                 ? 'No se encontraron semillas'
                 : 'No hay semillas registradas'}
             </h3>
-            <p style={styles.emptyText}>
+            <p className="catalog-empty-text">
               {searchTerm || selectedCategory || showOnlyAvailable
                 ? 'Intenta ajustar tus filtros de búsqueda'
                 : 'Cuando otros usuarios registren sus semillas, aparecerán aquí'}
@@ -290,10 +293,10 @@ function CatalogPage() {
       />
 
       {/* Información adicional */}
-      <div style={styles.infoSection}>
-        <div style={styles.infoCard}>
-          <h3 style={styles.infoTitle}>💡 ¿Cómo funciona?</h3>
-          <ul style={styles.infoList}>
+      <div className="catalog-info-section">
+        <div className="catalog-info-card">
+          <h3 className="catalog-info-title">💡 ¿Cómo funciona?</h3>
+          <ul className="catalog-info-list">
             <li>Explora semillas disponibles de otros agricultores</li>
             <li>Usa los filtros para encontrar lo que necesitas</li>
             <li>Haz clic en las tarjetas para ver más detalles</li>
@@ -303,265 +306,6 @@ function CatalogPage() {
       </div>
     </div>
   )
-}
-
-// Estilos mobile-first
-const styles = {
-  container: {
-    padding: '20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    backgroundColor: '#f5f5f5',
-    minHeight: 'calc(100vh - 140px)',
-  },
-  header: {
-    textAlign: 'center',
-    marginBottom: '25px',
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '12px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  },
-  title: {
-    color: '#1976d2',
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    margin: '0 0 8px 0',
-  },
-  subtitle: {
-    color: '#666',
-    fontSize: '1rem',
-    margin: '0',
-  },
-  searchSection: {
-    marginBottom: '20px',
-  },
-  searchContainer: {
-    position: 'relative',
-    maxWidth: '400px',
-    margin: '0 auto',
-  },
-  searchInput: {
-    width: '100%',
-    padding: '12px 16px',
-    fontSize: '16px',
-    border: '2px solid #e0e0e0',
-    borderRadius: '8px',
-    outline: 'none',
-    transition: 'border-color 0.2s ease',
-    backgroundColor: 'white',
-    boxSizing: 'border-box',
-  },
-  clearButton: {
-    position: 'absolute',
-    right: '12px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    background: 'none',
-    border: 'none',
-    fontSize: '16px',
-    color: '#999',
-    cursor: 'pointer',
-    padding: '4px',
-  },
-  filtersSection: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    marginBottom: '20px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  filtersTitle: {
-    color: '#333',
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    margin: '0 0 15px 0',
-  },
-  filterButtons: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '8px',
-  },
-  filterButton: {
-    padding: '8px 16px',
-    border: '1px solid #e0e0e0',
-    borderRadius: '20px',
-    backgroundColor: 'white',
-    fontSize: '14px',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    whiteSpace: 'nowrap',
-  },
-  seedsSection: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    marginBottom: '20px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  },
-  sectionHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
-    flexWrap: 'wrap',
-  },
-  sectionTitle: {
-    color: '#333',
-    fontSize: '1.3rem',
-    fontWeight: 'bold',
-    margin: '0',
-  },
-  resultsCount: {
-    color: '#666',
-    fontSize: '0.9rem',
-    fontWeight: '500',
-  },
-  emptyState: {
-    textAlign: 'center',
-    padding: '40px 20px',
-  },
-  emptyIcon: {
-    fontSize: '4rem',
-    marginBottom: '20px',
-    opacity: 0.5,
-  },
-  emptyTitle: {
-    color: '#333',
-    fontSize: '1.3rem',
-    fontWeight: 'bold',
-    margin: '0 0 10px 0',
-  },
-  emptyText: {
-    color: '#666',
-    fontSize: '1rem',
-    margin: '0 0 25px 0',
-    lineHeight: 1.5,
-  },
-  emptyActions: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  primaryButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    border: 'none',
-    padding: '12px 24px',
-    borderRadius: '6px',
-    fontSize: '16px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s ease',
-  },
-  infoSection: {
-    marginBottom: '20px',
-  },
-  infoCard: {
-    backgroundColor: '#e3f2fd',
-    padding: '20px',
-    borderRadius: '8px',
-    border: '1px solid #bbdefb',
-  },
-  infoTitle: {
-    color: '#1976d2',
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    margin: '0 0 15px 0',
-  },
-  infoList: {
-    color: '#1565c0',
-    fontSize: '0.9rem',
-    lineHeight: 1.6,
-    margin: '0',
-    paddingLeft: '20px',
-  },
-  // Grid de semillas
-  seedsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '20px',
-    marginBottom: '30px',
-  },
-  // Estados de carga
-  loadingState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '60px 20px',
-    textAlign: 'center',
-  },
-  loadingSpinner: {
-    fontSize: '48px',
-    marginBottom: '16px',
-    animation: 'spin 2s linear infinite',
-  },
-  loadingText: {
-    color: '#666',
-    fontSize: '1.1rem',
-    margin: '0',
-  },
-  // Estados de error
-  errorState: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '60px 20px',
-    textAlign: 'center',
-    border: '2px solid #ffebee',
-    borderRadius: '8px',
-  },
-  errorIcon: {
-    fontSize: '48px',
-    marginBottom: '16px',
-  },
-  errorTitle: {
-    color: '#d32f2f',
-    fontSize: '1.3rem',
-    fontWeight: '600',
-    margin: '0 0 8px 0',
-  },
-  errorText: {
-    color: '#666',
-    fontSize: '1rem',
-    margin: '0 0 20px 0',
-  },
-  retryButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    padding: '12px 24px',
-    fontSize: '1rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s ease',
-  },
-  // Botón cargar más
-  loadMoreSection: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '30px',
-    marginBottom: '30px',
-  },
-  loadMoreButton: {
-    backgroundColor: '#4caf50',
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    padding: '14px 28px',
-    fontSize: '1rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s ease',
-    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)',
-  },
-  loadMoreButtonDisabled: {
-    backgroundColor: '#ccc',
-    cursor: 'not-allowed',
-    opacity: 0.7,
-  },
 }
 
 export default CatalogPage

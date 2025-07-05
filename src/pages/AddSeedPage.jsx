@@ -32,6 +32,7 @@ import ImageCapture from '../components/ui/ImageCapture'
 import { useAuth } from '../contexts/AuthContext'
 import { saveSeed } from '../services/seedService'
 import { uploadSeedImage } from '../services/imageService'
+import './AddSeedPage.css'
 
 function AddSeedPage() {
   // Hook de autenticación
@@ -154,12 +155,14 @@ function AddSeedPage() {
     }
   }
 
-  // Estado de conexión
-  const [isOffline, setIsOffline] = useState(!navigator.onLine)
-
+  // Estado de conexión (no usado por ahora, pero preparado para funcionalidad offline)
   useEffect(() => {
-    const handleOnline = () => setIsOffline(false)
-    const handleOffline = () => setIsOffline(true)
+    const handleOnline = () => {
+      // Funcionalidad offline futura
+    }
+    const handleOffline = () => {
+      // Funcionalidad offline futura
+    }
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
     return () => {
@@ -169,7 +172,10 @@ function AddSeedPage() {
   }, [])
 
   return (
-    <div style={styles.container} className="page-transition gpu-accelerated">
+    <div
+      style={styles.container}
+      className="add-seed-container page-transition gpu-accelerated"
+    >
       {/* Feedback visual de éxito/error y spinner de carga */}
       {(submitMessage || submitError || isSubmitting) && (
         <div style={{ marginBottom: '18px', textAlign: 'center' }}>
@@ -236,18 +242,26 @@ function AddSeedPage() {
       )}
 
       {/* Header de la página */}
-      <div style={styles.header}>
-        <h1 style={styles.title}>➕ Registrar Nueva Semilla</h1>
+      <div style={styles.header} className="add-seed-header">
+        <h1 style={styles.title} className="add-seed-title">
+          ➕ Registrar Nueva Semilla
+        </h1>
         <p style={styles.subtitle}>
           Añade una semilla a tu colección para intercambiar
         </p>
       </div>
 
       {/* Formulario de registro */}
-      <form onSubmit={handleSubmit} style={styles.form}>
+      <form
+        onSubmit={handleSubmit}
+        style={styles.form}
+        className="add-seed-form"
+      >
         {/* Información básica */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📝 Información Básica</h2>
+          <h2 style={styles.sectionTitle} className="add-seed-section-title">
+            📝 Información Básica
+          </h2>
 
           <div style={styles.fieldGroup}>
             <label style={styles.label} htmlFor="seedName">
@@ -523,8 +537,12 @@ function AddSeedPage() {
         </div>
 
         {/* Botones de acción */}
-        <div style={styles.actions}>
-          <button type="button" style={styles.secondaryButton}>
+        <div style={styles.actions} className="add-seed-actions">
+          <button
+            type="button"
+            style={styles.secondaryButton}
+            className="add-seed-secondary-button"
+          >
             📝 Guardar como Borrador
           </button>
           <button
@@ -533,6 +551,7 @@ function AddSeedPage() {
               ...styles.primaryButton,
               ...(canSubmit ? {} : styles.disabledButton),
             }}
+            className="add-seed-primary-button"
             disabled={!canSubmit}
           >
             ✅ Publicar Semilla
@@ -541,7 +560,10 @@ function AddSeedPage() {
 
         {/* Indicador de estado de validación */}
         {Object.keys(errors).length > 0 && (
-          <div style={styles.validationSummary}>
+          <div
+            style={styles.validationSummary}
+            className="add-seed-validation-summary"
+          >
             <p style={styles.validationTitle}>
               ⚠️ Revisa los siguientes campos:
             </p>
@@ -558,8 +580,10 @@ function AddSeedPage() {
 
       {/* Información adicional */}
       <div style={styles.infoSection}>
-        <div style={styles.infoCard}>
-          <h3 style={styles.infoTitle}>💡 Consejos para un buen registro</h3>
+        <div style={styles.infoCard} className="add-seed-info-card">
+          <h3 style={styles.infoTitle} className="add-seed-info-title">
+            💡 Consejos para un buen registro
+          </h3>
           <ul style={styles.infoList}>
             <li>Usa nombres descriptivos y específicos</li>
             <li>Incluye la variedad local si la conoces</li>
@@ -579,26 +603,23 @@ function AddSeedPage() {
   )
 }
 
-// Estilos mobile-first
+// Estilos base (las media queries están en AddSeedPage.css)
 const styles = {
+  // Estilos base que no requieren media queries
   container: {
-    padding: '20px',
-    maxWidth: '800px',
     margin: '0 auto',
     backgroundColor: '#f5f5f5',
     minHeight: 'calc(100vh - 140px)',
   },
   header: {
     textAlign: 'center',
-    marginBottom: '25px',
+    marginBottom: 'var(--spacing-md)',
     backgroundColor: 'white',
-    padding: '20px',
     borderRadius: '12px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   },
   title: {
     color: '#1976d2',
-    fontSize: '1.8rem',
     fontWeight: 'bold',
     margin: '0 0 8px 0',
   },
@@ -609,24 +630,22 @@ const styles = {
   },
   form: {
     backgroundColor: 'white',
-    padding: '25px',
     borderRadius: '8px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    marginBottom: '20px',
+    marginBottom: 'var(--spacing-md)',
   },
   section: {
-    marginBottom: '30px',
+    marginBottom: 'var(--spacing-lg)',
   },
   sectionTitle: {
     color: '#333',
-    fontSize: '1.2rem',
     fontWeight: 'bold',
-    margin: '0 0 20px 0',
+    margin: '0 0 var(--spacing-md) 0',
     paddingBottom: '10px',
     borderBottom: '2px solid #f0f0f0',
   },
   fieldGroup: {
-    marginBottom: '20px',
+    marginBottom: 'var(--spacing-md)',
   },
   label: {
     display: 'block',
@@ -637,7 +656,7 @@ const styles = {
   },
   input: {
     width: '100%',
-    padding: '12px 16px',
+    padding: '14px 16px',
     fontSize: '16px',
     border: '2px solid #e0e0e0',
     borderRadius: '6px',
@@ -648,7 +667,7 @@ const styles = {
   },
   select: {
     width: '100%',
-    padding: '12px 16px',
+    padding: '14px 16px',
     fontSize: '16px',
     border: '2px solid #e0e0e0',
     borderRadius: '6px',
@@ -660,7 +679,7 @@ const styles = {
   },
   textarea: {
     width: '100%',
-    padding: '12px 16px',
+    padding: '14px 16px',
     fontSize: '16px',
     border: '2px solid #e0e0e0',
     borderRadius: '6px',
@@ -669,19 +688,16 @@ const styles = {
     backgroundColor: 'white',
     boxSizing: 'border-box',
     resize: 'vertical',
-    minHeight: '100px',
+    minHeight: '120px',
     fontFamily: 'inherit',
   },
   mediaPlaceholder: {
     textAlign: 'center',
-    padding: '40px 20px',
     border: '2px dashed #e0e0e0',
     borderRadius: '8px',
     backgroundColor: '#fafafa',
   },
   mediaIcon: {
-    fontSize: '3rem',
-    marginBottom: '15px',
     opacity: 0.5,
   },
   mediaText: {
@@ -697,56 +713,57 @@ const styles = {
   },
   actions: {
     display: 'flex',
-    gap: '15px',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginTop: '30px',
+    marginTop: 'var(--spacing-lg)',
   },
   primaryButton: {
     backgroundColor: '#1976d2',
     color: 'white',
     border: 'none',
-    padding: '12px 24px',
     borderRadius: '6px',
     fontSize: '16px',
     fontWeight: '500',
     cursor: 'pointer',
     transition: 'background-color 0.2s ease',
-    minWidth: '150px',
+    minHeight: '48px',
   },
   secondaryButton: {
     backgroundColor: 'white',
     color: '#1976d2',
     border: '2px solid #1976d2',
-    padding: '12px 24px',
     borderRadius: '6px',
     fontSize: '16px',
     fontWeight: '500',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    minWidth: '150px',
+    minHeight: '48px',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+    color: '#666',
+    cursor: 'not-allowed',
+    opacity: 0.6,
   },
   infoSection: {
-    marginBottom: '20px',
+    marginBottom: 'var(--spacing-md)',
   },
   infoCard: {
     backgroundColor: '#e8f5e8',
-    padding: '20px',
     borderRadius: '8px',
     border: '1px solid #c8e6c9',
   },
   infoTitle: {
     color: '#2e7d32',
-    fontSize: '1.1rem',
     fontWeight: 'bold',
-    margin: '0 0 15px 0',
+    margin: '0 0 var(--spacing-sm) 0',
   },
   infoList: {
     color: '#2e7d32',
     fontSize: '0.9rem',
     lineHeight: 1.6,
     margin: '0',
-    paddingLeft: '20px',
+    paddingLeft: 'var(--spacing-md)',
   },
   toggleContainer: {
     display: 'flex',
@@ -797,6 +814,45 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '5px',
+  },
+  // Estilos para imagen capturada
+  imageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  capturedImage: {
+    maxWidth: '100%',
+    height: 'auto',
+    borderRadius: '8px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+  },
+  imageActions: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  // Estilos para validación
+  validationSummary: {
+    backgroundColor: '#fff3cd',
+    border: '1px solid #ffeaa7',
+    borderRadius: '6px',
+    marginTop: 'var(--spacing-md)',
+  },
+  validationTitle: {
+    color: '#856404',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    margin: '0 0 var(--spacing-xs) 0',
+  },
+  validationList: {
+    color: '#856404',
+    fontSize: '0.85rem',
+    margin: '0',
+    paddingLeft: 'var(--spacing-md)',
+  },
+  validationItem: {
+    marginBottom: '4px',
   },
 }
 

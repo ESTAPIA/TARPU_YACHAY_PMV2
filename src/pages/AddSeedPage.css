@@ -1,0 +1,260 @@
+/* AddSeedPage.css - Estilos responsive mobile-first */
+
+/* Media queries para el contenedor */
+.add-seed-container {
+  padding: var(--spacing-sm);
+  max-width: 100%;
+}
+
+@media (min-width: 480px) {
+  .add-seed-container {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (min-width: 768px) {
+  .add-seed-container {
+    max-width: 600px;
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .add-seed-container {
+    max-width: 800px;
+  }
+}
+
+/* Media queries para el header */
+.add-seed-header {
+  padding: var(--spacing-sm);
+}
+
+@media (min-width: 480px) {
+  .add-seed-header {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Media queries para el título */
+.add-seed-title {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 480px) {
+  .add-seed-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .add-seed-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Media queries para el formulario */
+.add-seed-form {
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .add-seed-form {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Media queries para títulos de sección */
+.add-seed-section-title {
+  font-size: 1.1rem;
+}
+
+@media (min-width: 480px) {
+  .add-seed-section-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Evitar zoom en iOS - inputs con tamaño mínimo 16px */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .add-seed-textarea {
+    min-height: 100px;
+  }
+}
+
+/* Media queries para placeholder de imagen */
+.add-seed-media-placeholder {
+  padding: var(--spacing-lg) var(--spacing-sm);
+}
+
+@media (min-width: 480px) {
+  .add-seed-media-placeholder {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+}
+
+.add-seed-media-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+@media (min-width: 480px) {
+  .add-seed-media-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+/* Media queries para acciones/botones */
+.add-seed-actions {
+  gap: var(--spacing-sm);
+}
+
+@media (max-width: 479px) {
+  .add-seed-actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .add-seed-primary-button,
+  .add-seed-secondary-button {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* Media queries para botones individuales */
+.add-seed-primary-button,
+.add-seed-secondary-button {
+  padding: 14px 24px;
+  min-width: 140px;
+  min-height: 48px;
+}
+
+/* Media queries para imagen capturada */
+.add-seed-image-container {
+  gap: var(--spacing-sm);
+}
+
+@media (min-width: 480px) {
+  .add-seed-image-container {
+    gap: var(--spacing-md);
+  }
+}
+
+.add-seed-captured-image {
+  max-height: 300px;
+}
+
+@media (min-width: 480px) {
+  .add-seed-captured-image {
+    max-height: 400px;
+  }
+}
+
+.add-seed-image-actions {
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 479px) {
+  .add-seed-image-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+/* Media queries para información adicional */
+.add-seed-info-card {
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .add-seed-info-card {
+    padding: var(--spacing-lg);
+  }
+}
+
+.add-seed-info-title {
+  font-size: 1rem;
+}
+
+@media (min-width: 480px) {
+  .add-seed-info-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Media queries para validación */
+.add-seed-validation-summary {
+  padding: var(--spacing-md);
+}
+
+/* Mejoras de accesibilidad táctil para móviles */
+@media (max-width: 767px) {
+  .add-seed-checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  .add-seed-toggle-label {
+    padding: 8px 0;
+    cursor: pointer;
+  }
+}
+
+/* Optimizaciones para pantallas muy pequeñas (< 360px) */
+@media (max-width: 359px) {
+  .add-seed-container {
+    padding: var(--spacing-xs);
+  }
+
+  .add-seed-form {
+    padding: var(--spacing-sm);
+  }
+
+  .add-seed-header {
+    padding: var(--spacing-xs);
+  }
+
+  .add-seed-title {
+    font-size: 1.3rem;
+  }
+
+  .add-seed-section-title {
+    font-size: 1rem;
+  }
+}
+
+/* Hover states solo para dispositivos que lo soportan */
+@media (hover: hover) {
+  .add-seed-primary-button:hover {
+    background-color: #1565c0;
+  }
+
+  .add-seed-secondary-button:hover {
+    background-color: #f5f5f5;
+  }
+
+  input:hover,
+  select:hover,
+  textarea:hover {
+    border-color: #bdbdbd;
+  }
+}
+
+/* Focus visible para navegación por teclado */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.add-seed-primary-button:focus-visible,
+.add-seed-secondary-button:focus-visible {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
