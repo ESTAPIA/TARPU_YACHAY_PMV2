@@ -93,9 +93,19 @@ function useFormValidator(formData, validationRules = {}) {
     []
   )
 
-  // Combinar reglas por defecto con reglas personalizadas
+  // Usar reglas personalizadas si se proporcionan, sino usar reglas por defecto
   const rules = useMemo(() => {
-    return { ...defaultRules, ...validationRules }
+    // Si se proporcionan reglas personalizadas y no están vacías, usar solo esas
+    if (validationRules && Object.keys(validationRules).length > 0) {
+      console.log(
+        '🔧 Usando reglas personalizadas:',
+        Object.keys(validationRules)
+      )
+      return validationRules
+    }
+    // Si no hay reglas personalizadas, usar las por defecto
+    console.log('🔧 Usando reglas por defecto:', Object.keys(defaultRules))
+    return defaultRules
   }, [defaultRules, validationRules])
 
   /**
@@ -181,13 +191,11 @@ function useFormValidator(formData, validationRules = {}) {
         [fieldName]: error || undefined,
       }))
 
-      // Actualizar estado general del formulario después del siguiente render
-      setTimeout(() => {
-        const allErrors = validateAllFields()
-        const formIsValid =
-          Object.keys(allErrors).filter(key => allErrors[key]).length === 0
-        setIsValid(formIsValid)
-      }, 0)
+      // Actualizar estado general del formulario inmediatamente
+      const allErrors = validateAllFields()
+      const formIsValid =
+        Object.keys(allErrors).filter(key => allErrors[key]).length === 0
+      setIsValid(formIsValid)
     },
     [validateField, formData, validateAllFields]
   )
@@ -304,7 +312,22 @@ function useFormValidator(formData, validationRules = {}) {
 
     // Estado derivado
     hasErrors: Object.keys(errors).length > 0,
-    canSubmit: isValid && Object.keys(touched).length > 0,
+    canSubmit: useMemo(() => {
+      const hasRequiredFields = Object.keys(touched).length > 0
+      const hasNoErrors =
+        Object.keys(errors).filter(key => errors[key]).length === 0
+      const isFormValid = hasRequiredFields && hasNoErrors
+
+      console.log('🔍 Calculando canSubmit:', {
+        hasRequiredFields,
+        hasNoErrors,
+        isFormValid,
+        errors,
+        touched,
+      })
+
+      return isFormValid
+    }, [errors, touched]),
   }
 }
 

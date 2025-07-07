@@ -420,6 +420,94 @@ export async function deleteSeed(seedId, userId) {
   }
 }
 
+/**
+ * Elimina una semilla validando primero si tiene intercambios pendientes
+ * @param {string} seedId - ID de la semilla
+ * @param {string} userId - ID del usuario (para verificar permisos)
+ * @returns {Promise<Object>} Resultado de la operación con validaciones
+ */
+export async function deleteSeedWithValidation(seedId, userId) {
+  try {
+    console.log('🗑️ Iniciando eliminación validada de semilla:', seedId)
+
+    // Verificar permisos primero
+    const seedResult = await getSeed(seedId)
+    if (!seedResult.success) {
+      throw new Error('Semilla no encontrada')
+    }
+
+    if (seedResult.data.ownerId !== userId) {
+      throw new Error('No tienes permisos para eliminar esta semilla')
+    }
+
+    // Importar la función para verificar intercambios activos
+    const { checkSeedActiveExchanges } = await import('./exchangeService.js')
+
+    // Verificar si hay intercambios activos
+    const exchangeCheck = await checkSeedActiveExchanges(seedId)
+
+    if (exchangeCheck.hasActiveExchanges) {
+      const { counts } = exchangeCheck.data
+      let warningMessage =
+        'Esta semilla tiene intercambios activos que impiden su eliminación:'
+
+      if (counts.pending > 0) {
+        warningMessage += `\n• ${counts.pending} solicitud${counts.pending > 1 ? 'es' : ''} pendiente${counts.pending > 1 ? 's' : ''}`
+      }
+
+      if (counts.accepted > 0) {
+        warningMessage += `\n• ${counts.accepted} intercambio${counts.accepted > 1 ? 's' : ''} aceptado${counts.accepted > 1 ? 's' : ''}`
+      }
+
+      warningMessage +=
+        '\n\nDebes completar o cancelar estos intercambios antes de eliminar la semilla.'
+
+      return {
+        success: false,
+        error: 'ACTIVE_EXCHANGES',
+        userMessage: warningMessage,
+        data: {
+          activeExchanges: exchangeCheck.data.activeExchanges,
+          counts: exchangeCheck.data.counts,
+          seedName: seedResult.data.name,
+        },
+      }
+    }
+
+    // Si no hay intercambios activos, proceder con la eliminación
+    const deleteResult = await deleteSeed(seedId, userId)
+
+    if (deleteResult.success) {
+      console.log('✅ Semilla eliminada exitosamente tras validación')
+    }
+
+    return deleteResult
+  } catch (error) {
+    console.error('❌ Error en eliminación validada:', error)
+
+    // Determinar mensaje de error específico
+    let userMessage = 'Error al eliminar la semilla. Intenta nuevamente.'
+
+    if (error.code === 'permission-denied') {
+      userMessage = 'No tienes permisos para eliminar esta semilla.'
+    } else if (error.code === 'unavailable') {
+      userMessage =
+        'Sin conexión a internet. Intenta nuevamente cuando tengas conexión.'
+    } else if (error.message.includes('No tienes permisos')) {
+      userMessage = error.message
+    } else if (error.message.includes('no encontrada')) {
+      userMessage = 'La semilla ya no existe o fue eliminada.'
+    }
+
+    return {
+      success: false,
+      error: error.message,
+      userMessage,
+      code: error.code || 'unknown',
+    }
+  }
+}
+
 // Exportar funciones principales
 export default {
   saveSeed,
@@ -429,4 +517,5 @@ export default {
   updateSeed,
   deleteSeed,
   validateSeedData,
+  deleteSeedWithValidation,
 }

@@ -6,9 +6,20 @@
 import { useState, useEffect } from 'react'
 import { SearchBar, SeedCard, SeedDetailModal } from '../components/catalog'
 import { getPublicSeeds } from '../services/seedCatalogService'
+import { getUserSeeds } from '../services/seedService'
+import { getUserExchangesSent } from '../services/exchangeService'
+import {
+  getUserProfile,
+  validateUserForExchanges,
+} from '../services/userProfileService'
+import { useAuth } from '../contexts/AuthContext'
+import ExchangeRequestForm from '../components/exchanges/ExchangeRequestForm'
 import './CatalogPage.css'
 
 function CatalogPage() {
+  // Usuario autenticado
+  const { user } = useAuth()
+
   // Estados para búsqueda y filtros
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -27,6 +38,11 @@ function CatalogPage() {
 
   // Estado para paginación
   const [lastDocId, setLastDocId] = useState(null)
+
+  // Estados para formulario de intercambio (PASO 9)
+  const [showExchangeForm, setShowExchangeForm] = useState(false)
+  const [requestedSeed, setRequestedSeed] = useState(null)
+  const [requestError, setRequestError] = useState(null)
 
   // Cargar semillas al montar el componente
   useEffect(() => {
@@ -162,12 +178,221 @@ function CatalogPage() {
     setSelectedSeed(null)
   }
 
-  // Manejar solicitud de intercambio
-  const handleRequestExchange = seed => {
-    // Por ahora solo mostramos un mensaje (lógica de intercambio para pasos futuros)
-    alert(
-      `Solicitud de intercambio para ${seed.name} (funcionalidad en desarrollo)`
-    )
+  // Manejar solicitud de intercambio (PASO 9)
+  const handleRequestExchange = async seed => {
+    setRequestError(null)
+
+    // Validación 1: Usuario autenticado
+    if (!user) {
+      setRequestError('Debes iniciar sesión para solicitar un intercambio')
+      return
+    }
+
+    // Validación 2: No puede solicitar su propia semilla
+    if (seed.ownerId === user.uid) {
+      setRequestError('No puedes solicitar tu propia semilla')
+      return
+    }
+
+    // Validación 3: Verificar que el usuario tenga semillas registradas
+    try {
+      const userSeedsResult = await getUserSeeds(user.uid)
+      if (!userSeedsResult.success || userSeedsResult.data.length === 0) {
+        setRequestError(
+          'Necesitas tener semillas registradas para poder intercambiar. Ve a "Mis Semillas" para registrar una.'
+        )
+        return
+      }
+    } catch (error) {
+      console.error('Error verificando semillas del usuario:', error)
+      setRequestError('Error al verificar tus semillas. Intenta nuevamente.')
+      return
+    }
+
+    // Validación 4: Verificar que no existe una solicitud pendiente previa
+    try {
+      const response = await getUserExchangesSent(user.uid)
+
+      // Asegurar que tenemos un array para trabajar
+      const sentExchanges = Array.isArray(response)
+        ? response
+        : response.data || []
+
+      const existingRequest = sentExchanges.find(
+        exchange =>
+          exchange.seedRequestedId === seed.id &&
+          (exchange.status === 'pending' || exchange.status === 'accepted')
+      )
+
+      if (existingRequest) {
+        setRequestError(
+          'Ya tienes una solicitud pendiente para esta semilla. Revisa tus intercambios enviados.'
+        )
+        return
+      }
+    } catch (error) {
+      console.error('Error verificando solicitudes existentes:', error)
+      setRequestError(
+        'Error al verificar solicitudes existentes. Intenta nuevamente.'
+      )
+      return
+    }
+
+    // Validación 5: Verificar perfil completo del usuario para intercambios
+    try {
+      const userProfileResult = await getUserProfile(user.uid)
+      if (!userProfileResult.success) {
+        setRequestError('Error al verificar tu perfil. Intenta nuevamente.')
+        return
+      }
+
+      const profileValidation = await validateUserForExchanges(
+        userProfileResult.data
+      )
+      console.log('🔍 Resultado de validación de perfil:', profileValidation)
+
+      if (!profileValidation.success) {
+        console.error(
+          '❌ Error en validación de perfil:',
+          profileValidation.error
+        )
+        setRequestError('Error al validar tu perfil para intercambios.')
+        return
+      }
+
+      console.log(
+        '✅ Validación exitosa, canExchange:',
+        profileValidation.data.canExchange
+      )
+
+      if (!profileValidation.data.canExchange) {
+        const missingFields = profileValidation.data.missingFields
+          .map(field => {
+            switch (field) {
+              case 'name':
+                return 'nombre completo'
+              case 'whatsappNumber':
+                return 'número de WhatsApp'
+              case 'location':
+                return 'ubicación'
+              case 'allowExchangeRequests':
+                return 'permitir solicitudes de intercambio'
+              default:
+                return field
+            }
+          })
+          .join(', ')
+
+        setRequestError(
+          `Para solicitar intercambios necesitas completar tu perfil: ${missingFields}. Ve a tu perfil para completar estos campos.`
+        )
+        return
+      }
+
+      // Verificar configuración de privacidad
+      if (
+        userProfileResult.data.settings?.privacy?.allowExchangeRequests ===
+        false
+      ) {
+        setRequestError(
+          'Tienes deshabilitadas las solicitudes de intercambio en tu configuración de privacidad. Ve a tu perfil para habilitarlas.'
+        )
+        return
+      }
+    } catch (error) {
+      console.error('Error verificando perfil del usuario:', error)
+      setRequestError('Error al verificar tu perfil. Intenta nuevamente.')
+      return
+    }
+
+    // Validación 6: Verificar WhatsApp del propietario
+    try {
+      console.log(
+        '🔍 Verificando WhatsApp del propietario con ID:',
+        seed.ownerId
+      )
+
+      const ownerProfileResult = await getUserProfile(seed.ownerId)
+      if (!ownerProfileResult.success) {
+        console.error(
+          '❌ Error al obtener perfil del propietario:',
+          ownerProfileResult.error
+        )
+        setRequestError(
+          'Error al verificar la información del propietario. Intenta nuevamente.'
+        )
+        return
+      }
+
+      console.log(
+        '✅ Perfil del propietario obtenido:',
+        ownerProfileResult.data
+      )
+
+      const ownerWhatsApp = ownerProfileResult.data.whatsappNumber
+      if (!ownerWhatsApp || ownerWhatsApp.trim() === '') {
+        console.log('❌ El propietario no tiene WhatsApp configurado')
+        setRequestError(
+          'El propietario de esta semilla no tiene WhatsApp configurado. No es posible solicitar intercambio en este momento.'
+        )
+        return
+      }
+
+      console.log('✅ WhatsApp del propietario verificado:', ownerWhatsApp)
+
+      // Verificar también que el propietario permita solicitudes de intercambio
+      const ownerPrivacySettings = ownerProfileResult.data.settings?.privacy
+      if (ownerPrivacySettings?.allowExchangeRequests === false) {
+        console.log('❌ El propietario no permite solicitudes de intercambio')
+        setRequestError(
+          'El propietario de esta semilla no acepta solicitudes de intercambio en este momento.'
+        )
+        return
+      }
+
+      console.log('✅ El propietario acepta solicitudes de intercambio')
+    } catch (error) {
+      console.error('Error verificando datos del propietario:', error)
+      setRequestError(
+        'Error al verificar la información del propietario. Intenta nuevamente.'
+      )
+      return
+    }
+
+    // Todas las validaciones pasaron, mostrar formulario de solicitud
+    setRequestedSeed(seed)
+    setShowExchangeForm(true)
+    setIsModalOpen(false) // Cerrar modal de detalle
+  }
+
+  // Funciones callback para ExchangeRequestForm (PASO 9)
+  const handleExchangeSuccess = () => {
+    setShowExchangeForm(false)
+    setRequestedSeed(null)
+    setRequestError(null)
+    // Opcional: Mostrar mensaje de éxito
+    alert('✅ Solicitud de intercambio enviada correctamente')
+  }
+
+  const handleExchangeCancel = () => {
+    setShowExchangeForm(false)
+    setRequestedSeed(null)
+    setRequestError(null)
+  }
+
+  const handleExchangeError = error => {
+    // Extraer el mensaje del error para mostrar al usuario
+    const errorMessage =
+      error?.userMessage ||
+      error?.error ||
+      error?.message ||
+      'Error al procesar la solicitud'
+    console.log('🔴 Error en intercambio:', {
+      originalError: error,
+      displayMessage: errorMessage,
+    })
+    setRequestError(errorMessage)
+    // Mantener el formulario abierto para que el usuario pueda intentar de nuevo
   }
 
   // Agregar animación CSS para el spinner
@@ -291,6 +516,60 @@ function CatalogPage() {
           selectedSeed ? () => handleRequestExchange(selectedSeed) : undefined
         }
       />
+
+      {/* Formulario de solicitud de intercambio (PASO 9) */}
+      {showExchangeForm && requestedSeed && (
+        <ExchangeRequestForm
+          requestedSeed={requestedSeed}
+          onSuccess={handleExchangeSuccess}
+          onCancel={handleExchangeCancel}
+          onError={handleExchangeError}
+        />
+      )}
+
+      {/* Mensaje de error de validación */}
+      {requestError && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: '#ff4444',
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            zIndex: 1001,
+            boxShadow: '0 4px 12px rgba(255, 68, 68, 0.3)',
+            maxWidth: '90%',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+            }}
+          >
+            <span>{requestError}</span>
+            <button
+              onClick={() => setRequestError(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '16px',
+                padding: '0',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Información adicional */}
       <div className="catalog-info-section">

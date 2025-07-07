@@ -1,0 +1,528 @@
+/* src/components/exchanges/ExchangeRequestForm.css */
+/* BLOQUE 7 - PASO 3.1: Estilos para formulario de solicitud de intercambio */
+
+/* Contenedor principal */
+.exchange-request-form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-sm);
+  background-color: #f5f5f5;
+}
+
+.exchange-request-form {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Header del formulario */
+.exchange-form-header {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.exchange-form-title {
+  margin: 0 0 8px 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.exchange-form-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Secciones del formulario */
+.exchange-section {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.exchange-section:last-child {
+  border-bottom: none;
+}
+
+.exchange-section-title {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e3f2fd;
+}
+
+/* Información de semilla solicitada */
+.requested-seed-info {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid #e3f2fd;
+}
+
+.requested-seed-image {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.requested-seed-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.requested-seed-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.requested-seed-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1976d2;
+  line-height: 1.3;
+}
+
+.requested-seed-variety {
+  font-weight: normal;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.requested-seed-owner,
+.requested-seed-location {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Campos del formulario */
+.form-field {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-label-small {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: white;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-input-search {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus,
+.form-textarea:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.form-input-search:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-select:disabled,
+.form-textarea:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Estados de validación */
+.field-error {
+  border-color: #f44336 !important;
+  background-color: #fff5f5 !important;
+}
+
+.field-valid {
+  border-color: #4caf50 !important;
+  background-color: #f1f8e9 !important;
+}
+
+.form-error {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #f44336;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-help {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+}
+
+/* Estados de carga */
+.loading-seeds {
+  padding: var(--spacing-md);
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.no-seeds-message {
+  padding: var(--spacing-md);
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.no-seeds-message p {
+  margin: 0 0 8px 0;
+  color: #856404;
+}
+
+.no-seeds-help {
+  font-size: 0.85rem !important;
+  font-style: italic;
+}
+
+/* Mensajes de error del formulario */
+.form-submit-error {
+  margin: var(--spacing-md) 0;
+  padding: 12px 16px;
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.exchange-form-error {
+  padding: var(--spacing-lg);
+  background-color: #ffebee;
+  color: #c62828;
+  text-align: center;
+  border-radius: 8px;
+  margin: var(--spacing-md);
+}
+
+/* Botones de acción */
+.exchange-form-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background-color: #fafafa;
+  flex-wrap: wrap;
+}
+
+.exchange-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.exchange-btn-primary {
+  background-color: #1976d2;
+  color: white;
+}
+
+.exchange-btn-primary:hover:not(:disabled) {
+  background-color: #1565c0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+}
+
+.exchange-btn-secondary {
+  background-color: white;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.exchange-btn-secondary:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #bdbdbd;
+}
+
+.exchange-btn-disabled {
+  background-color: #e0e0e0 !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Spinner de carga */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Indicadores de estado */
+.form-status {
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+  text-align: center;
+}
+
+.status-validating,
+.status-submitting,
+.status-success,
+.status-error {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-validating {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status-submitting {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.status-success {
+  background-color: #e8f5e9;
+  color: #388e3c;
+  border: 1px solid #c8e6c9;
+}
+
+.status-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+/* Estilos para búsqueda de semillas */
+.seed-search-field {
+  margin-bottom: 1rem;
+}
+
+.form-input-search:disabled {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+/* Estilos para preview de semilla seleccionada */
+.selected-seed-preview {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+}
+
+.preview-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.preview-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.preview-image {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: #f3f4f6;
+}
+
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.preview-variety {
+  font-weight: 400;
+  color: #6b7280;
+  margin-left: 0.25rem;
+}
+
+.preview-location {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.preview-description {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+/* Responsive para preview */
+@media (max-width: 640px) {
+  .preview-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .preview-image {
+    width: 50px;
+    height: 50px;
+    align-self: flex-start;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .exchange-request-form-container {
+    padding: var(--spacing-xs);
+  }
+
+  .exchange-form-header {
+    padding: var(--spacing-md);
+  }
+
+  .exchange-form-title {
+    font-size: 1.2rem;
+  }
+
+  .exchange-section {
+    padding: var(--spacing-md);
+  }
+
+  .requested-seed-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .requested-seed-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .exchange-form-actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .exchange-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Evitar zoom en iOS */
+@media (max-width: 767px) {
+  .form-select,
+  .form-textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Estados de error específicos */
+.exchange-form-error p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Mejoras de accesibilidad */
+.exchange-btn:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* Estados de hover mejorados */
+.form-select:hover:not(:disabled),
+.form-textarea:hover:not(:disabled) {
+  border-color: #1976d2;
+}

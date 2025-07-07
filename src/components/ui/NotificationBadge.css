@@ -1,0 +1,185 @@
+/* src/components/ui/NotificationBadge.css */
+/* BLOQUE 7 - PASO 8.2: Estilos para badge de notificaciones */
+
+/* Estilos base del badge */
+.notification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0.125rem;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Tamaños del badge */
+.notification-badge--small {
+  min-width: 1rem;
+  height: 1rem;
+  font-size: 0.625rem;
+  padding: 0.0625rem;
+}
+
+.notification-badge--medium {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.75rem;
+  padding: 0.125rem;
+}
+
+.notification-badge--large {
+  min-width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.875rem;
+  padding: 0.1875rem;
+}
+
+/* Variante de solo punto */
+.notification-badge--dot {
+  min-width: 0.75rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  font-size: 0;
+  padding: 0;
+}
+
+.notification-badge--dot.notification-badge--small {
+  min-width: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.notification-badge--dot.notification-badge--large {
+  min-width: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Estado oculto */
+.notification-badge--hidden {
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+}
+
+/* Animación cuando aparecen nuevas notificaciones */
+.notification-badge--animating {
+  animation: notification-pulse 0.3s ease-out;
+}
+
+@keyframes notification-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: #ef4444;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Estados hover y focus para accesibilidad */
+.notification-badge:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+.notification-badge:focus {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Variantes de color alternativas */
+.notification-badge--primary {
+  background-color: #2563eb;
+}
+
+.notification-badge--primary:hover {
+  background-color: #1d4ed8;
+}
+
+.notification-badge--success {
+  background-color: #16a34a;
+}
+
+.notification-badge--success:hover {
+  background-color: #15803d;
+}
+
+.notification-badge--warning {
+  background-color: #d97706;
+}
+
+.notification-badge--warning:hover {
+  background-color: #b45309;
+}
+
+/* Responsive - ajustes para pantallas pequeñas */
+@media (max-width: 480px) {
+  .notification-badge {
+    min-width: 1.125rem;
+    height: 1.125rem;
+    font-size: 0.6875rem;
+  }
+
+  .notification-badge--small {
+    min-width: 0.875rem;
+    height: 0.875rem;
+    font-size: 0.5625rem;
+  }
+
+  .notification-badge--large {
+    min-width: 1.375rem;
+    height: 1.375rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Alto contraste para accesibilidad */
+@media (prefers-contrast: high) {
+  .notification-badge {
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #000;
+  }
+}
+
+/* Reducción de movimiento para usuarios sensibles */
+@media (prefers-reduced-motion: reduce) {
+  .notification-badge {
+    transition: none;
+  }
+
+  .notification-badge--animating {
+    animation: none;
+  }
+
+  .notification-badge:hover {
+    transform: none;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .notification-badge {
+    background-color: #f87171;
+    color: #1f2937;
+  }
+
+  .notification-badge:hover {
+    background-color: #fca5a5;
+  }
+}

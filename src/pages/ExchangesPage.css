@@ -1,0 +1,409 @@
+/* src/pages/ExchangesPage.css */
+/* BLOQUE 7 - PASO 7.1: Estilos para ExchangesPage con pestañas y diseño responsive */
+
+/* Contenedor principal */
+.exchanges-page {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 140px);
+}
+
+/* Header de la página */
+.exchanges-header {
+  text-align: center;
+  margin-bottom: 25px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.exchanges-title {
+  color: #1976d2;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+}
+
+.exchanges-subtitle {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Navegación por pestañas */
+.tab-navigation {
+  display: flex;
+  background-color: white;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+.tab-active {
+  background-color: #1976d2;
+  color: white;
+}
+
+.tab:hover:not(.tab-active) {
+  background-color: #f5f5f5;
+}
+
+/* Contenido de pestañas */
+.tab-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 300px;
+}
+
+.tab-panel {
+  width: 100%;
+}
+
+/* Header de sección */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.status-badge {
+  background-color: #f5f5f5;
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Estados vacíos */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.empty-text {
+  color: #666;
+  font-size: 1rem;
+  margin: 0 0 25px 0;
+  line-height: 1.5;
+}
+
+.empty-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.primary-button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: #1565c0;
+}
+
+/* Sección de estadísticas */
+.stats-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Sección de información */
+.info-section {
+  margin-bottom: 20px;
+}
+
+.info-card {
+  background-color: #fff3e0;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ffcc02;
+}
+
+.info-title {
+  color: #f57c00;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.step-number {
+  background-color: #f57c00;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-text {
+  color: #e65100;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .exchanges-page {
+    padding: 15px;
+  }
+
+  .exchanges-header {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .exchanges-title {
+    font-size: 1.5rem;
+  }
+
+  .tab-content {
+    padding: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exchanges-page {
+    padding: 10px;
+  }
+
+  .tab {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .tab-content {
+    padding: 15px;
+  }
+
+  .empty-state {
+    padding: 30px 15px;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+  }
+
+  .empty-title {
+    font-size: 1.1rem;
+  }
+
+  .empty-text {
+    font-size: 0.9rem;
+  }
+
+  .info-card {
+    padding: 15px;
+  }
+
+  .step {
+    gap: 10px;
+  }
+
+  .step-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* BLOQUE 7 - PASO 7.3: Estilos para feedback de operaciones */
+
+/* Banner de feedback */
+.feedback-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 500px;
+  border-radius: 8px;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: feedbackSlideIn 0.3s ease-out;
+}
+
+.feedback-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+.feedback-message {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.feedback-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.feedback-close:hover {
+  opacity: 1;
+}
+
+/* Variantes de feedback */
+.feedback-success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.feedback-success .feedback-close {
+  color: white;
+}
+
+.feedback-error {
+  background-color: #f44336;
+  color: white;
+}
+
+.feedback-error .feedback-close {
+  color: white;
+}
+
+/* Animación de entrada */
+@keyframes feedbackSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive para feedback */
+@media (max-width: 480px) {
+  .feedback-banner {
+    min-width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+    left: 20px;
+    transform: none;
+  }
+}

@@ -1,0 +1,675 @@
+/* src/components/exchanges/ExchangeCard.css */
+/* BLOQUE 7 - PASO 4.1: Estilos para tarjeta de intercambio */
+
+/* Contenedor principal de la tarjeta */
+.exchange-card {
+  background: white;
+  border: 1px solid #e1e1e1;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+.exchange-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.exchange-card--clickable {
+  cursor: pointer;
+}
+
+.exchange-card--clickable:hover {
+  transform: translateY(-2px);
+  border-color: #4caf50;
+}
+
+.exchange-card--clickable:focus {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+}
+
+.exchange-card--error {
+  border-color: #f44336;
+  background-color: #fafafa;
+  text-align: center;
+  color: #d32f2f;
+}
+
+/* Header con estado y fecha */
+.exchange-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Badge de estado */
+.exchange-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.exchange-status--pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.exchange-status--accepted {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.exchange-status--rejected {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.exchange-status--completed {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.exchange-status--unknown {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+/* Tiempo transcurrido */
+.exchange-time {
+  color: #6c757d;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Sección de semillas */
+.exchange-card__seeds {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.exchange-seed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.exchange-seed__image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  border: 1px solid #e1e1e1;
+}
+
+.exchange-seed__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.exchange-seed__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.exchange-seed__info {
+  text-align: center;
+  max-width: 80px;
+}
+
+.exchange-seed__name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+  color: #333;
+}
+
+.exchange-seed__variety {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+/* Flecha de intercambio */
+.exchange-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 8px;
+  min-width: 60px;
+}
+
+.exchange-arrow__icon {
+  font-size: 1.5rem;
+  color: #4caf50;
+  margin-bottom: 4px;
+}
+
+.exchange-arrow__text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Información del usuario */
+.exchange-card__user {
+  margin-bottom: 16px;
+}
+
+.exchange-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.exchange-user__label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.exchange-user__name {
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Información de contacto (visible solo en estados aceptado/completado) */
+.exchange-user__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f8fdf9;
+  border-radius: 6px;
+  border-left: 3px solid #4caf50;
+}
+
+.exchange-user__whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.exchange-user__whatsapp:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.exchange-user__private-info {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Mensaje de la solicitud */
+.exchange-card__message {
+  margin-bottom: 16px;
+}
+
+.exchange-message {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  border-left: 3px solid #4caf50;
+}
+
+.exchange-message__label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.exchange-message__text {
+  font-size: 0.875rem;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* Área de acciones (placeholder) */
+.exchange-card__actions {
+  border-top: 1px solid #e1e1e1;
+  padding-top: 16px;
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.exchange-actions-placeholder {
+  text-align: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.exchange-actions__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Mensaje de error en acciones */
+.exchange-actions__error {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.exchange-error-text {
+  display: inline-block;
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid #ffcdd2;
+}
+
+/* Botones de acción */
+.exchange-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 40px;
+  position: relative;
+}
+
+.exchange-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variantes de botones */
+.exchange-action--primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.exchange-action--primary:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-1px);
+}
+
+.exchange-action--secondary {
+  background-color: #2196f3;
+  color: white;
+}
+
+.exchange-action--secondary:hover:not(:disabled) {
+  background-color: #1976d2;
+  transform: translateY(-1px);
+}
+
+.exchange-action--danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.exchange-action--danger:hover:not(:disabled) {
+  background-color: #d32f2f;
+  transform: translateY(-1px);
+}
+
+.exchange-action--success {
+  background-color: #8bc34a;
+  color: white;
+}
+
+.exchange-action--success:hover:not(:disabled) {
+  background-color: #7cb342;
+  transform: translateY(-1px);
+}
+
+/* Estados de carga */
+.exchange-action--loading {
+  pointer-events: none;
+}
+
+.exchange-action__spinner {
+  animation: spin 1s linear infinite;
+}
+
+.exchange-action__icon {
+  font-size: 16px;
+}
+
+.exchange-action__text {
+  font-size: 14px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* PASO 4.3: Modal de confirmación */
+.exchange-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.exchange-confirm-modal__content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.exchange-confirm-modal__header {
+  margin-bottom: 16px;
+}
+
+.exchange-confirm-modal__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+
+.exchange-confirm-modal__body {
+  margin-bottom: 24px;
+}
+
+.exchange-confirm-modal__message {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+.exchange-confirm-modal__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.exchange-confirm-action {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exchange-confirm-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.exchange-confirm-action--secondary {
+  background-color: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.exchange-confirm-action--secondary:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.exchange-confirm-action--danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.exchange-confirm-action--danger:hover:not(:disabled) {
+  background-color: #d32f2f;
+}
+
+.exchange-confirm-action--success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.exchange-confirm-action--success:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .exchange-card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .exchange-card__header {
+    margin-bottom: 12px;
+  }
+
+  .exchange-card__seeds {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .exchange-seed {
+    min-width: 70px;
+  }
+
+  .exchange-seed__image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .exchange-seed__info {
+    max-width: 70px;
+  }
+
+  .exchange-seed__name {
+    font-size: 0.8125rem;
+  }
+
+  .exchange-seed__variety {
+    font-size: 0.6875rem;
+  }
+
+  .exchange-arrow {
+    min-width: 50px;
+    margin: 0 4px;
+  }
+
+  .exchange-arrow__icon {
+    font-size: 1.25rem;
+  }
+
+  .exchange-arrow__text {
+    font-size: 0.6875rem;
+  }
+
+  .exchange-card__user,
+  .exchange-card__message {
+    margin-bottom: 12px;
+  }
+
+  .exchange-message {
+    padding: 10px;
+  }
+
+  .exchange-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .exchange-action {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .exchange-confirm-modal {
+    padding: 8px;
+  }
+
+  .exchange-confirm-modal__content {
+    padding: 20px;
+  }
+
+  .exchange-confirm-modal__actions {
+    flex-direction: column;
+  }
+
+  .exchange-confirm-action {
+    width: 100%;
+  }
+}
+
+/* Muy pequeñas (Galaxy S8 portrait y similares) */
+@media (max-width: 360px) {
+  .exchange-card {
+    padding: 10px;
+  }
+
+  .exchange-card__seeds {
+    gap: 6px;
+  }
+
+  .exchange-seed {
+    min-width: 60px;
+  }
+
+  .exchange-seed__image {
+    width: 45px;
+    height: 45px;
+  }
+
+  .exchange-seed__info {
+    max-width: 60px;
+  }
+
+  .exchange-seed__name {
+    font-size: 0.75rem;
+  }
+
+  .exchange-seed__variety {
+    font-size: 0.625rem;
+  }
+
+  .exchange-arrow {
+    min-width: 40px;
+  }
+
+  .exchange-arrow__icon {
+    font-size: 1rem;
+  }
+
+  .exchange-arrow__text {
+    font-size: 0.625rem;
+  }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .exchange-card {
+    transition: none;
+  }
+
+  .exchange-card--clickable:hover {
+    transform: none;
+  }
+}
+
+/* Alto contraste */
+@media (prefers-contrast: high) {
+  .exchange-card {
+    border-width: 2px;
+  }
+
+  .exchange-status {
+    border-width: 2px;
+  }
+
+  .exchange-seed__image {
+    border-width: 2px;
+  }
+}

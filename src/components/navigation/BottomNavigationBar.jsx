@@ -2,11 +2,16 @@
 // Barra de navegación inferior con 5 secciones principales
 
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useNotifications } from '../../hooks/useNotifications'
+import NotificationBadge from '../ui/NotificationBadge'
 
 function BottomNavigationBar() {
   const location = useLocation()
   const navigate = useNavigate()
   const currentPath = location.pathname
+
+  // Hook de notificaciones para el badge
+  const { unreadCount } = useNotifications()
 
   // Configuración de las 5 secciones principales
   const navItems = [
@@ -98,6 +103,15 @@ function BottomNavigationBar() {
               <div style={styles.activeIndicator} aria-hidden="true" />
             )}
 
+            {/* Badge de notificaciones para intercambios */}
+            {item.id === 'exchanges' &&
+              unreadCount > 0 &&
+              currentPath !== '/exchanges' && (
+                <div style={styles.notificationBadgeContainer}>
+                  <NotificationBadge size="small" showDot={true} />
+                </div>
+              )}
+
             <span
               style={{
                 ...styles.navIcon,
@@ -114,6 +128,10 @@ function BottomNavigationBar() {
             >
               {item.label}
             </span>
+            {/* Badge de notificaciones */}
+            {item.id === 'exchanges' && unreadCount > 0 && (
+              <NotificationBadge count={unreadCount} />
+            )}
           </button>
         ))}
       </div>
@@ -190,6 +208,13 @@ const styles = {
   navLabelActive: {
     color: '#1976d2',
     fontWeight: '600',
+  },
+  notificationBadgeContainer: {
+    position: 'absolute',
+    top: '8px',
+    right: '8px',
+    zIndex: 1,
+    pointerEvents: 'none',
   },
 }
 
