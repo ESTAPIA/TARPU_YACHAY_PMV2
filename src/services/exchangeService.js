@@ -736,12 +736,21 @@ export async function createExchangeRequest(
 
       // BLOQUE 7 - PASO 8.1: Crear notificación para el propietario de la semilla
       try {
+        console.log('📮 Intentando crear notificación con datos:', {
+          userId: seedRequested.ownerId,
+          type: NOTIFICATION_TYPES.EXCHANGE_REQUEST,
+          relatedId: result.data.id,
+          requesterName: requester.name || requester.email || 'Usuario',
+          seedRequestedName: seedRequested.name,
+          seedOfferedName: seedOffered.name,
+        })
+
         console.log('📮 Creando notificación para el propietario...', {
           ownerUserId: seedRequested.ownerId,
           exchangeId: result.data.id,
         })
 
-        await createNotification({
+        const notificationResult = await createNotification({
           userId: seedRequested.ownerId, // Propietario de la semilla solicitada
           type: NOTIFICATION_TYPES.EXCHANGE_REQUEST,
           relatedId: result.data.id, // ID del intercambio creado
@@ -755,7 +764,7 @@ export async function createExchangeRequest(
           },
         })
 
-        console.log('✅ Notificación creada exitosamente')
+        console.log('✅ Notificación creada exitosamente:', notificationResult)
       } catch (notificationError) {
         console.error(
           '⚠️ Error creando notificación (pero intercambio fue creado):',

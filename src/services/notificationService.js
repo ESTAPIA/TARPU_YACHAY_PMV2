@@ -238,40 +238,86 @@ function prepareNotificationData(notificationData) {
 
 /**
  * Crea una nueva notificación en Firestore
- * @param {string} userId - ID del usuario destinatario
- * @param {string} type - Tipo de notificación
- * @param {string} exchangeId - ID del intercambio relacionado (opcional)
- * @param {string} title - Título de la notificación
- * @param {string} message - Mensaje de la notificación
+ * @param {string|Object} userIdOrData - ID del usuario destinatario O objeto con datos completos
+ * @param {string} type - Tipo de notificación (si se usa modo parámetros)
+ * @param {string} exchangeId - ID del intercambio relacionado (si se usa modo parámetros)
+ * @param {string} title - Título de la notificación (si se usa modo parámetros)
+ * @param {string} message - Mensaje de la notificación (si se usa modo parámetros)
  * @returns {Promise<Object>} Resultado de la operación
  */
 export async function createNotification(
-  userId,
+  userIdOrData,
   type,
   exchangeId,
   title,
   message
 ) {
   try {
+    console.log('🔔 createNotification recibió:', arguments)
+
+    let notificationData
+
+    // Determinar si se pasó un objeto o parámetros individuales
+    if (typeof userIdOrData === 'object' && userIdOrData !== null) {
+      // Modo objeto: se pasó un objeto con todos los datos
+      console.log('📦 Usando modo objeto para createNotification')
+
+      const {
+        userId,
+        type: objType,
+        relatedId,
+        title: objTitle,
+        message: objMessage,
+        data,
+      } = userIdOrData
+
+      notificationData = {
+        userId: userId,
+        type: objType,
+        exchangeId: exchangeId || relatedId, // Normalizar exchangeId/relatedId
+        title: objTitle,
+        message: objMessage,
+        data: data,
+      }
+
+      // Si no se proporcionan title/message pero sí data, generarlos automáticamente
+      if ((!objTitle || !objMessage) && data && objType) {
+        console.log('🤖 Generando contenido automático de notificación')
+        const generatedContent = generateNotificationContent(objType, data)
+
+        if (!objTitle) notificationData.title = generatedContent.title
+        if (!objMessage) notificationData.message = generatedContent.message
+      }
+    } else {
+      // Modo compatibilidad: parámetros individuales
+      console.log(
+        '📝 Usando modo parámetros individuales para createNotification'
+      )
+
+      notificationData = {
+        userId: userIdOrData,
+        type: type,
+        exchangeId: exchangeId,
+        title: title,
+        message: message,
+      }
+    }
+
     console.log('🔔 Creando notificación...', {
-      userId,
-      type,
-      exchangeId,
-      title,
+      userId: notificationData.userId,
+      type: notificationData.type,
+      exchangeId: notificationData.exchangeId,
+      title: notificationData.title,
     })
 
     // Validar parámetros obligatorios
-    if (!userId || !type || !title || !message) {
+    if (
+      !notificationData.userId ||
+      !notificationData.type ||
+      !notificationData.title ||
+      !notificationData.message
+    ) {
       throw new Error('Parámetros obligatorios: userId, type, title, message')
-    }
-
-    // Preparar datos de notificación
-    const notificationData = {
-      userId,
-      type,
-      exchangeId,
-      title,
-      message,
     }
 
     // Validar datos
