@@ -12,9 +12,12 @@ import { calculateUserStats } from '../services/userProfileService'
 import './HomePage.css'
 import logoPuce from '../assets/logos/logo_puce.png'
 import logoAPS from '../assets/logos/APS.png'
+import { useTranslation } from '../i18n/useTranslation'
+import { FaInstagram, FaFacebook, FaTiktok } from 'react-icons/fa'
 
 function HomePage() {
   const { user } = useAuth()
+  const { t } = useTranslation()
 
   // Estado para estadísticas dinámicas
   const [stats, setStats] = useState({
@@ -82,10 +85,13 @@ function HomePage() {
     <div className="home-container page-transition gpu-accelerated">
       {/* Header de la página */}
       <Header
-        title="Dashboard Principal"
-        subtitle={`Bienvenido de nuevo, ${user?.email?.split('@')[0] || 'Usuario'}`}
+        title={t('home.title')}
+        subtitle={t('home.subtitle', {
+          name: user?.email?.split('@')[0] || t('home.user'),
+        })}
         icon="🏠"
         variant="primary"
+        showLanguageSwitch={true}
       />
 
       {/* Estadísticas rápidas */}
@@ -98,7 +104,7 @@ function HomePage() {
             ) : (
               <div className="stat-number">{stats.seedsRegistered}</div>
             )}
-            <div className="stat-label">Semillas Registradas</div>
+            <div className="stat-label">{t('home.stats.seedsRegistered')}</div>
           </div>
         </Card>
 
@@ -110,7 +116,7 @@ function HomePage() {
             ) : (
               <div className="stat-number">{stats.exchangesPending}</div>
             )}
-            <div className="stat-label">Intercambios Activos</div>
+            <div className="stat-label">{t('home.stats.exchangesPending')}</div>
           </div>
         </Card>
 
@@ -122,7 +128,9 @@ function HomePage() {
             ) : (
               <div className="stat-number">{stats.exchangesCompleted}</div>
             )}
-            <div className="stat-label">Conexiones</div>
+            <div className="stat-label">
+              {t('home.stats.exchangesCompleted')}
+            </div>
           </div>
         </Card>
       </div>
@@ -131,22 +139,24 @@ function HomePage() {
         <div className="error-message">
           <p>⚠️ {error}</p>
           <Button onClick={handleRetryStats} size="small" variant="secondary">
-            Reintentar
+            {t('home.retry')}
           </Button>
         </div>
       )}
 
       {/* Acciones rápidas */}
       <div className="quick-actions">
-        <h2 className="section-title">🚀 Acciones Rápidas</h2>
+        <h2 className="section-title">🚀 {t('home.quickActions.title')}</h2>
         <div className="action-grid">
           <Link to="/add-seed" style={{ textDecoration: 'none' }}>
             <Card clickable padding="medium" hover>
               <div className="action-content">
                 <div className="action-icon">➕</div>
-                <h3 className="action-title">Registrar Semilla</h3>
+                <h3 className="action-title">
+                  {t('home.quickActions.addSeed.title')}
+                </h3>
                 <p className="action-text">
-                  Añade una nueva semilla a tu colección
+                  {t('home.quickActions.addSeed.text')}
                 </p>
                 <Button
                   variant="primary"
@@ -154,7 +164,7 @@ function HomePage() {
                   icon="→"
                   iconPosition="right"
                 >
-                  Comenzar
+                  {t('home.quickActions.addSeed.button')}
                 </Button>
               </div>
             </Card>
@@ -164,9 +174,11 @@ function HomePage() {
             <Card clickable padding="medium" hover>
               <div className="action-content">
                 <div className="action-icon">🔍</div>
-                <h3 className="action-title">Explorar Catálogo</h3>
+                <h3 className="action-title">
+                  {t('home.quickActions.catalog.title')}
+                </h3>
                 <p className="action-text">
-                  Busca semillas disponibles para intercambio
+                  {t('home.quickActions.catalog.text')}
                 </p>
                 <Button
                   variant="secondary"
@@ -174,7 +186,7 @@ function HomePage() {
                   icon="🔍"
                   iconPosition="left"
                 >
-                  Explorar
+                  {t('home.quickActions.catalog.button')}
                 </Button>
               </div>
             </Card>
@@ -183,92 +195,62 @@ function HomePage() {
       </div>
       {/* Actividad reciente */}
       <div className="recent-activity">
-        <h2 className="section-title">📝 Actividad Reciente</h2>
+        <h2 className="section-title">📝 {t('home.recentActivity.title')}</h2>
         <div className="empty-state">
           <div className="empty-icon">📋</div>
-          <p className="empty-text">No hay actividad reciente</p>
-          <p className="empty-subtext">
-            Tu actividad aparecerá aquí cuando comiences a usar la app
-          </p>
+          <p className="empty-text">{t('home.recentActivity.empty')}</p>
+          <p className="empty-subtext">{t('home.recentActivity.subtext')}</p>
         </div>
       </div>
 
       {/* Sección Acerca de Nosotros */}
       <div className="about-section">
         <Card variant="secondary" padding="medium">
-          <h2 className="about-title">📍 Acerca de Tarpu Yachay</h2>
+          <h2 className="about-title">📍 {t('home.about.title')}</h2>
 
           <p className="about-description">
-            <strong>Tarpu Yachay</strong> es una aplicación web progresiva (PWA)
-            desarrollada por estudiantes de la carrera de Ingeniería en Sistemas
-            de Información de la{' '}
-            <strong>Pontificia Universidad Católica del Ecuador (PUCE)</strong>,
-            sede Quito.
+            <strong>Tarpu Yachay</strong> {t('home.about.description')}
           </p>
 
           <div
             className={`collapsible-content ${aboutExpanded ? 'expanded' : ''}`}
           >
-            <p>
-              Este proyecto se enmarca en la asignatura{' '}
-              <em>Emprendimiento Tecnológico con Enfoque Social</em>, guiado por
-              el docente <strong>Ing. Francisco Rodríguez Clavijo</strong>. Fue
-              desarrollado bajo la metodología de <em>Aprendizaje Servicio</em>,
-              con el objetivo de aplicar la tecnología para responder a
-              necesidades reales de comunidades rurales del Ecuador.
-            </p>
+            <p>{t('home.about.collapsible.project')}</p>
 
-            <h3>🎯 Propósito del Proyecto</h3>
-            <p>
-              Fortalecer el intercambio de semillas nativas en la comunidad de{' '}
-              <strong>Chugchilán</strong>, promoviendo la soberanía alimentaria
-              y la conservación de saberes ancestrales mediante el uso de una
-              herramienta digital accesible, diseñada específicamente para
-              contextos rurales.
-            </p>
+            <h3>🎯 {t('home.about.collapsible.purposeTitle')}</h3>
+            <p>{t('home.about.collapsible.purpose')}</p>
 
-            <h3>🙏 Agradecimientos Especiales</h3>
-            <p>
-              Agradecemos profundamente a la comunidad de{' '}
-              <strong>Chugchilán</strong> por su colaboración y participación
-              activa en el proceso de validación y pruebas de la aplicación.
-              retroalimentación ha sido invaluable para mejorar la funcionalidad
-              funcionalidad y usabilidad de Tarpu Yachay.
-            </p>
-            <p>
-              También agradecemos al{' '}
-              <strong>GAD Parroquial de Chugchilán</strong> por su apertura y
-              colaboración en territorio.
-            </p>
+            <h3>🙏 {t('home.about.collapsible.thanksTitle')}</h3>
+            <p>{t('home.about.collapsible.thanks')}</p>
+            <p>{t('home.about.collapsible.gad')}</p>
 
-            <h3>👥 Nuestro Equipo</h3>
+            <h3>👥 {t('home.about.collapsible.teamTitle')}</h3>
             <div className="team-grid">
               <div className="team-member">
                 <strong>Raul Amaguaña</strong>
-                <span>Coordinación comunitaria y validación territorial</span>
+                <span>{t('home.about.collapsible.team.raul')}</span>
               </div>
               <div className="team-member">
                 <strong>Danny Balseca</strong>
-                <span>Desarrollo frontend y soporte técnico</span>
+                <span>{t('home.about.collapsible.team.danny')}</span>
               </div>
               <div className="team-member">
                 <strong>Carlos Saavedra</strong>
-                <span>Diseño visual, encuestas y documentación</span>
+                <span>{t('home.about.collapsible.team.carlos')}</span>
               </div>
               <div className="team-member">
                 <strong>Anthony Sosa</strong>
-                <span>Desarrollo funcional de la app y pruebas técnicas</span>
+                <span>{t('home.about.collapsible.team.anthony')}</span>
               </div>
               <div className="team-member">
                 <strong>Saul Tapia</strong>
-                <span>
-                  Coordinación técnica general y despliegue de la aplicación
-                </span>
+                <span>{t('home.about.collapsible.team.saul')}</span>
               </div>
             </div>
 
             <div className="professor">
-              <strong>Profesor guía:</strong> Ing. Francisco Rodríguez Clavijo
+              <strong>{t('home.about.collapsible.professorLabel')}</strong> Ing.
+              Francisco Rodríguez Clavijo
             </div>
           </div>
 
@@ -285,7 +267,7 @@ function HomePage() {
               />
               <div className="logo-text">
                 <strong>PUCE</strong>
-                <small>Pontificia Universidad Católica del Ecuador</small>
+                <small>{t('home.about.collapsible.puce')}</small>
               </div>
             </div>
             <div className="logo-block">
@@ -299,15 +281,101 @@ function HomePage() {
                 }}
               />
               <div className="logo-text">
-                <strong>Innovación Social</strong>
-                <small>Aprendizaje Servicio</small>
+                <strong>{t('home.about.collapsible.innovation')}</strong>
+                <small>{t('home.about.collapsible.aps')}</small>
               </div>
             </div>
           </div>
 
           <button className="read-more-btn" onClick={toggleAboutSection}>
-            {aboutExpanded ? 'Leer menos' : 'Leer más'}
+            {aboutExpanded
+              ? t('home.about.readLess')
+              : t('home.about.readMore')}
           </button>
+        </Card>
+      </div>
+
+      {/* Sección Nuestras redes sociales */}
+      <div className="social-media-section">
+        <Card variant="primary" padding="medium">
+          <h2 className="social-media-title">
+            📱 {t('home.socialMedia.title')}
+          </h2>
+
+          <p className="social-media-description">
+            {t('home.socialMedia.subtitle')}
+          </p>
+
+          <div className="social-media-links">
+            <a
+              href="https://www.instagram.com/tarpu_yachay/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-media-link instagram-link"
+            >
+              <div className="social-icon">
+                <FaInstagram size={24} />
+              </div>
+              <div className="social-content">
+                <h3 className="social-platform">Instagram</h3>
+                <p className="social-text">{t('home.socialMedia.instagram')}</p>
+              </div>
+              <Button
+                variant="secondary"
+                size="small"
+                icon="→"
+                iconPosition="right"
+              >
+                {t('home.socialMedia.follow')}
+              </Button>
+            </a>
+
+            <a
+              href="https://www.tiktok.com/@tarpuyachay"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-media-link tiktok-link"
+            >
+              <div className="social-icon">
+                <FaTiktok size={24} />
+              </div>
+              <div className="social-content">
+                <h3 className="social-platform">TikTok</h3>
+                <p className="social-text">{t('home.socialMedia.tiktok')}</p>
+              </div>
+              <Button
+                variant="secondary"
+                size="small"
+                icon="→"
+                iconPosition="right"
+              >
+                {t('home.socialMedia.follow')}
+              </Button>
+            </a>
+
+            <a
+              href="https://www.facebook.com/people/Tarpu-Yachay/pfbid0qTZKjkrqTUG1JKMnq8nwfqQEcfdPYpDbNHgFRV8c5kY5jMUVFmMxUFkKoRQ7rBaql/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-media-link facebook-link"
+            >
+              <div className="social-icon">
+                <FaFacebook size={24} />
+              </div>
+              <div className="social-content">
+                <h3 className="social-platform">Facebook</h3>
+                <p className="social-text">{t('home.socialMedia.facebook')}</p>
+              </div>
+              <Button
+                variant="secondary"
+                size="small"
+                icon="→"
+                iconPosition="right"
+              >
+                {t('home.socialMedia.follow')}
+              </Button>
+            </a>
+          </div>
         </Card>
       </div>
     </div>

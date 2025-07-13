@@ -2,6 +2,7 @@
 // Componente de encabezado reutilizable
 
 import PropTypes from 'prop-types'
+import LanguageSwitch from './LanguageSwitch'
 
 function Header({
   title,
@@ -10,6 +11,7 @@ function Header({
   variant = 'primary',
   centered = true,
   className = '',
+  showLanguageSwitch = false,
 }) {
   return (
     <header
@@ -31,6 +33,11 @@ function Header({
           <h1 style={styles.title}>{title}</h1>
           {subtitle && <p style={styles.subtitle}>{subtitle}</p>}
         </div>
+        {showLanguageSwitch && (
+          <div style={styles.languageContainer}>
+            <LanguageSwitch />
+          </div>
+        )}
       </div>
     </header>
   )
@@ -92,6 +99,13 @@ const styles = {
     flex: 1,
   },
 
+  languageContainer: {
+    flexShrink: 0,
+    marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+  },
+
   title: {
     margin: '0 0 4px 0',
     fontSize: '1.5rem',
@@ -125,6 +139,7 @@ Header.propTypes = {
   variant: PropTypes.oneOf(['primary', 'secondary', 'success', 'warning']),
   centered: PropTypes.bool,
   className: PropTypes.string,
+  showLanguageSwitch: PropTypes.bool,
 }
 
 export default Header
