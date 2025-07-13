@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "com.puce.tarpuyachay",
-    "sha256_cert_fingerprints": ["EA470837389038799725A4407F05D77B8331B918FA24667B99FCBF2736CA2E80"]
+    "sha256_cert_fingerprints": ["C16D46B9A02209898A6DA6E5685E026EFC4A73F2E35D283A42D52A1CBA37DE04"]
   }
 }]
