@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.vercel.tarpu_yachay_pmv_2_wine.twa",
+    "sha256_cert_fingerprints": ["EA470837389038799725A4407F05D77B8331B918FA24667B99FCBF2736CA2E80"]
+  }
+}]
